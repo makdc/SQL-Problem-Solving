@@ -1,0 +1,40 @@
+﻿    WITH SalesData AS ( 
+        SELECT  
+            s.StoreID, 
+            p.ProductID, 
+            SUM(od.Quantity) AS TotalQuantity, 
+            SUM(od.Quantity * od.UnitPrice) AS TotalSales 
+        FROM  
+            Orders o 
+        JOIN  
+            OrderDetails od ON o.OrderID = od.OrderID 
+        JOIN  
+            Products p ON od.ProductID = p.ProductID 
+        JOIN  
+            Stores s ON o.StoreID = s.StoreID 
+        WHERE  
+            o.OrderDate BETWEEN '2023-01-01' AND '2023-12-31' 
+        GROUP BY  
+            s.StoreID, p.ProductID 
+    ), 
+    RankedSales AS ( 
+        SELECT  
+            StoreID, 
+            ProductID, 
+            TotalQuantity, 
+            TotalSales, 
+            RANK() OVER (PARTITION BY StoreID ORDER BY TotalSales DESC) AS SalesRank 
+        FROM  
+            SalesData 
+    ) 
+    SELECT  
+        StoreID, 
+        ProductID, 
+        TotalQuantity, 
+        TotalSales 
+    FROM  
+        RankedSales 
+    WHERE  
+        SalesRank <= 10 
+    ORDER BY  
+        StoreID, TotalSales DESC; 
