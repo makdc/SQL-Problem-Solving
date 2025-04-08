@@ -1,4 +1,5 @@
 ﻿/*
+https://www.boot.dev/lessons/1386caad-9db7-4a59-91c7-2dd5fd6cb204
 Assignment
 
 Our front-end team is finalizing the profile page for CashPal. We need to write a query that returns all the user data they need for an individual user's profile. The query needs to return the following fields:
@@ -26,3 +27,8 @@ INNER JOIN transactions t
 ON u.id=t.user_id
 WHERE u.id=6 AND t.was_successful=1
 GROUP BY u.id;
+
+/*
+id	name	age	username	country_name	balance
+6	Allan	27	Alires	United States	37.56
+*/
